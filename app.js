@@ -1,24 +1,19 @@
-var events = require('events');
-var util = require('util');
+var express = require ('express');
+var todoController = require('./controllers/todoController');
 
-var Person = function (name) {
-    this.name = name;
+var app=express();
 
-};
+//set up template engine
 
-util.inherits(Person, events.EventEmitter);
+app.set('view engine','ejs');
 
-var James = new Person('James');
-var Marry = new Person('Marry');
-var Ryan = new Person('Ryan');
+//static files
 
-var people = [James, Marry, Ryan];
+app.use(express.static('./public'));
 
-people.forEach(function (person) {
-    person.on('speak', function (mssg) {
-        console.log(person.name + ' said : ' + mssg);
-    });
-});
+//fire controllers 
 
-James.emit('speak','hey dudes');
-Ryan.emit('speak',' I want a curry');
+todoController(app);
+//listen on port
+
+app.listen(3000);
